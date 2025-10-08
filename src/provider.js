@@ -1,5 +1,6 @@
 import { Provider } from 'oidc-provider';
 import { loadOrCreateJWKS } from './key-loader.js';
+import * as onche from './onche.js';
 import RedisAdapter from './redis-adapter.js';
 import fs from 'fs';
 
