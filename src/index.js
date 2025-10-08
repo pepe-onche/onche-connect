@@ -12,6 +12,7 @@ const __dirname = path.dirname(__filename);
 
 async function start() {
   const provider = await getProvider();
+  provider.proxy = true;
   const app = express();
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static(path.join(__dirname, "public")));
