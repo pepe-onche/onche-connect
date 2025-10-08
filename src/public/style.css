@@ -1,0 +1,112 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #121212;
+  color: #e0e0e0;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+#login-container {
+  background: #1e1e1e;
+  padding: 2.5rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+}
+
+.text-center { text-align: center; }
+.text-sm { font-size: 0.9rem; color: #b0b0b0; }
+.error { color: #ff6b6b; text-align: center; font-size: 0.875rem; margin-bottom: 0.5rem; }
+
+input[type=text], input[type=number] {
+  padding: 0.65rem;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #2c2c2c;
+  color: #e0e0e0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input[type=text]:focus, input[type=number]:focus {
+  outline: none;
+  border-color: #4f9dff;
+  box-shadow: 0 0 5px #4f9dff;
+}
+
+button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s, transform 0.1s;
+  width: 100%;
+}
+button:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #4f9dff;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #1c7ed6;
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background: #28a745;
+  color: #fff;
+}
+.btn-success:hover {
+  background: #1e7e34;
+  transform: translateY(-1px);
+}
+
+.otp-inputs {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+.otp-inputs input {
+  width: 2.5rem;
+  text-align: center;
+  font-size: 1.4rem;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #2c2c2c;
+  color: #e0e0e0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.otp-inputs input:focus {
+  outline: none;
+  border-color: #4f9dff;
+  box-shadow: 0 0 5px #4f9dff;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: #888;
+  text-align: center;
+  margin-top: 0.5rem;
+}

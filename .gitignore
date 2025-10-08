@@ -1,0 +1,6 @@
+.env
+clients.json
+jwks.json
+node_modules
+front/node_modules
+front/dist

@@ -1,0 +1,74 @@
+<div id="login-container">
+  <div class="text-center">
+    <label>PIN #<%= session %></label>
+  </div>
+
+  <div class="error">
+    <%= error ? error : '' %>
+  </div>
+
+  <form
+    hx-post="/interaction/<%= uid %>/verify"
+    hx-target="#login-container"
+    hx-swap="outerHTML"
+    method="POST"
+  >
+    <input type="hidden" name="username" value="<%= username %>">
+
+    <div class="otp-inputs">
+      <% for (let i = 1; i <= 6; i++) { %>
+        <input type="text" name="pin<%= i %>" maxlength="1" required>
+      <% } %>
+    </div>
+
+    <div>
+      <button type="submit" class="btn-success">Verify</button>
+    </div>
+  </form>
+
+  <script>
+  const inputs = document.querySelectorAll('.otp-inputs input');
+
+  inputs.forEach((input, i) => {
+
+    // Move forward automatically on single digit input
+    input.addEventListener('input', e => {
+      if (input.value.length === 1 && i < inputs.length - 1) {
+        inputs[i + 1].focus();
+        inputs[i + 1].setSelectionRange(0,0);
+      }
+    });
+
+    // Backspace to move backward
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !input.value && i > 0) {
+        inputs[i - 1].focus();
+      }
+    });
+
+    // Optional: select input text on focus
+    input.addEventListener('focus', e => e.target.select());
+
+    // Handle paste event
+    input.addEventListener('paste', e => {
+      e.preventDefault();
+      const paste = (e.clipboardData || window.clipboardData).getData('text');
+      const digits = paste.replace(/\D/g, '').split(''); // keep only numbers
+
+      digits.forEach((digit, index) => {
+        if (inputs[i + index]) {
+          inputs[i + index].value = digit;
+        }
+      });
+
+      // Determine the last filled input
+      const lastIndex = Math.min(i + digits.length - 1, inputs.length - 1);
+
+      // Focus last input, but move caret to end (no selection)
+      inputs[lastIndex].focus();
+      const valLength = inputs[lastIndex].value.length;
+      inputs[lastIndex].setSelectionRange(valLength, valLength);
+    });
+  });
+  </script>
+</div>

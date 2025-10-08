@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<%- include('head.ejs') %>
+<body>
+  <div id="login-container">
+    <form
+      hx-post="/interaction/<%= uid %>/username"
+      hx-target="#login-container"
+      hx-swap="outerHTML"
+      method="POST"
+    >
+      <div class="text-center">
+        <h1>Onche Connect</h1>
+        <div class="text-sm">Utilisez votre compte Onche.org</div>
+      </div>
+
+      <% if (error) { %>
+        <div class="error"><%= error %></div>
+      <% } %>
+
+      <input type="text" name="username" placeholder="Pseudo sur Onche.org" required autofocus style="margin-top:15px; margin-bottom:15px" />
+      <button type="submit" class="btn-primary" id="login-btn">Se connecter</button>
+
+      <div class="footer-text">
+        En continuant, vous acceptez de ne pas être une salope.
+      </div>
+    </form>
+  </div>
+</body>
+</html>
