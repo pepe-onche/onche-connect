@@ -21,7 +21,6 @@ export default async function getProvider() {
         accountId: id,
         async claims(use, scope) {
           const profile = await onche.getProfile(id) || {};
-          console.log("profile =>", profile);
           return { sub: id, ...profile };
         },
       };
@@ -30,6 +29,10 @@ export default async function getProvider() {
     adapter: RedisAdapter,
     clients,
     jwks,
+    claims: {
+      openid: ['sub'],
+      profile: ['id', 'name', 'picture', 'onche_level', 'onche_signup_date', 'onche_last_login_date', 'onche_msg_count'],
+    },
     ttl: {
       AccessToken: 3600,
       AuthorizationCode: 600,

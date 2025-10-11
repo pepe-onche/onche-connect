@@ -82,8 +82,8 @@ async function start() {
         grant = new provider.Grant({ accountId, clientId: params.client_id });
       }
 
-      grant.addOIDCScope('openid');
-      grant.addOIDCClaims(['sub']);
+      grant.addOIDCScope('openid profile');
+      grant.addOIDCClaims(['sub', 'id', 'name', 'picture', 'onche_level', 'onche_signup_date', 'onche_last_login_date', 'onche_msg_count']);
 
       const grantId = await grant.save();
 

@@ -73,7 +73,7 @@ export async function fetchChatToken(retry = 0) {
     if (res.status !== 200) {
       await login();
       if (retry > 2) {
-        console.error("Error fetching chat token after retries");
+        console.error("Error fetching chat token");
         return null;
       }
       return fetchChatToken(retry + 1);
@@ -134,14 +134,14 @@ export async function sendChatMsg(msg, to, token) {
 /** Get a profile */
 export async function getProfile(username, retry = 0) {
   try {
-    const res = await fetch("https://onche.org/profile/"+username, {
+    const res = await fetch("https://onche.org/profil/"+username, {
       headers: getHeaders(),
     });
 
     if (res.status !== 200) {
       await login();
       if (retry > 2) {
-        console.error("Error fetching chat token after retries");
+        console.error("Error fetching profile");
         return null;
       }
       return getProfile(username, retry + 1);
@@ -149,20 +149,55 @@ export async function getProfile(username, retry = 0) {
 
     const html = await res.text();
 
-    const $ = cheerio.load(data);
+    const $ = cheerio.load(html);
 
     const name = $('.profile-cover-username').text();
-    const level = $('.profile-cover-badges>.profile-cover-badge').text();
-    const signup_date = $('.profile-blocs>.profile-bloc:first-of-type>.item:nth-of-type(0)>.item-value').text();
-    const last_login_date = $('.profile-blocs>.profile-bloc:first-of-type>.item:nth-of-type(1)>.item-value').text();
-    const msg_count = $('.profile-blocs>.profile-bloc:first-of-type>.item:nth-of-type(2)>.item-value').text();
+    let id = null;
+    const {topics} = $.extract({
+      topics: [{
+        selector: '.topics>.topic>.topic-subject.link',
+        value: 'href',
+      }]
+    });
+    console.log(topics)
+    for (let topic of topics) {
+      const res = await fetch(topic, {
+        headers: getHeaders(),
+      });
+
+
+      if (res.status !== 200) {
+        continue;
+      }
+
+      const html = await res.text();
+      const $ = cheerio.load(html);
+      const userId = $(`.message[data-username="${name}"]`).attr("data-user-id");
+
+      if (userId) {
+        id = parseInt(userId);
+        break;
+      }
+    }
+
+    if (!id) {
+      return null;
+    }
+
+    const picture = $('.profile-cover>div.profile-cover-avatar>img').attr('src');
+    const onche_level = parseInt($('.profile-cover>div.profile-cover-badges>div:first-of-type').text().split(' ')[1]);
+    const onche_signup_date = $('.profile-blocs>div:nth-child(1)>div:nth-child(2)>div.item-value').text().split(' ')[0];
+    const onche_last_login_date = $('.profile-blocs>div:nth-child(1)>div:nth-child(3)>div.item-value').text();
+    const onche_msg_count = parseInt($('.profile-blocs>div:nth-child(1)>div:nth-child(4)>div.item-value').text());
 
     return {
-      username: name,
-      level,
-      signup_date,
-      last_login_date,
-      msg_count,
+      id,
+      name,
+      picture,
+      onche_level,
+      onche_signup_date,
+      onche_last_login_date,
+      onche_msg_count,
     };
   } catch (err) {
     console.error(err);

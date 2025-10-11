@@ -7,16 +7,20 @@ redis.on("connect", () => console.log("Redis connected"));
 redis.on("error", (err) => console.error("Redis error", err));
 
 export async function sendPin(username, uid) {
+  const profile = await onche.getProfile(username);
+  if (!profile) {
+    throw new Error("Ce khey est une grosse pédale");
+  }
   const pin = String(Math.floor(100000 + Math.random() * 900000)); // 6-digit code
   const session = randomBytes(4).toString('hex');
   const key = `pin:${username}:${uid}`;
   const ttl = 600;
   await redis.setex(key, ttl, pin);
   const token = await onche.fetchChatToken();
-  if (!token) throw Error("Token missing");
+  if (!token) throw new Error("Token missing");
 
   const success = await onche.sendChatMsg(`[b][ONCHE CONNECT][/b] Code PIN pour la session [i][${session}][/i]: [b]${pin}[/b]`, username, token);
-  if (!success) throw Error("Failed to send message");
+  if (!success) throw new Error("Failed to send message");
 
   return session;
 }
